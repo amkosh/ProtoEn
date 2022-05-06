@@ -15,12 +15,7 @@ let iter = 0;
 let speed = 0;
 let cycle = 100;
 let moveX1 = 1;
-let moveX2 = x2/x1;
-
-const x1start = Math.ceil(x/2 + x1*(-40));
-const x2start = Math.ceil(x/2 + x2*(-40));
-const x1end = Math.ceil(x/2 + x1*(40));
-const x2end = Math.ceil(x/2 + x2*(40));
+let moveX2 = Math.ceil(x2/x1);
 
 //Массивы для точек
 let arrX1 = [];
@@ -31,7 +26,7 @@ document.getElementById('main').appendChild(mainWindow);
 //Тестовая среда
 
 function getX(){
-    for(i = -40; i < 40; i++){
+    for(i = -11; i < 11; i++){
         arrX1.push(Math.ceil(x/2 + x1*i));
         arrX2.push(Math.ceil(x/2 + x2*i));
     }
@@ -79,17 +74,8 @@ class CanvasBackground {
         if(iter <= cycle){
             iter++;
             moveAuto();
-        } else if (speed > 0) {
-            arrX1.unshift(x1start);
-            arrX1.pop();
-            arrX2.unshift(x2start);
-            arrX2.pop();
-            iter = 0;
-        } else if (speed < 0){
-            arrX1.push(x1end);
-            arrX1.shift();
-            arrX2.push(x2end);
-            arrX2.shift();
+        } else {
+            swapLines();
             iter = 0;
         }
        
@@ -103,6 +89,21 @@ class CanvasBackground {
 const canvas = new CanvasBackground("canvas");
 canvas.start();
 
+//Перекладка вертикальных линий
+function swapLines () {
+    if(speed > 0) {
+        arrX1.unshift(arrX1[0]-x1);
+        arrX1.pop();
+        arrX2.unshift(arrX2[0]-x2);
+        arrX2.pop();
+    } else if (speed < 0) {
+        arrX1.push(arrX1[arrX1.length-1]+x1);
+        arrX1.shift();
+        arrX2.push(arrX2[arrX2.length-1]+x2);
+        arrX2.shift();
+    }
+}
+
 //Движение влево-вправо
     function moveAuto(){
     let tmp = [];
@@ -110,28 +111,25 @@ canvas.start();
         arrX1.forEach((e) => {
             tmp.push(e + moveX1*speed);
         })
-        arrX1 = tmp;
-        
 
+        arrX1 = tmp;
         arrX2.forEach((e) => {
             tmp2.push(e + moveX2*speed);
         })
         arrX2 = tmp2;
-        console.log('done');
 }
 
 //Установка скорости и длины цикла
 function setSpeed(event){
     //Увеличение и уменьшение скорости
-    if(event.which == 1 && speed < 3) {
+    if(event.which == 1 && speed < 1) {
         speed += 0.1;
     } else if (event.which == 3 && speed > -1){
         speed -= 0.1;
     }
 
     //Устанавливаем цикл
-    let t = Number(speed.toFixed(1));
-    cycle = Math.ceil(Math.abs(x1/(moveX1*speed)));
+    cycle = Math.abs(x1/(moveX1*speed));
 }
 
 //Запрет срабатывания контекстного меню
