@@ -85,6 +85,8 @@ class CanvasBackground {
 
         if(arrX1[0] > x1){
             swapLines();
+        } else if (arrX1[arrX1.length - 1] < (x - x1)) {
+            swapLines();
         }
        
         this.ctx.strokeStyle = "#aa77ff";
