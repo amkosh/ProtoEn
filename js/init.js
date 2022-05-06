@@ -26,7 +26,7 @@ document.getElementById('main').appendChild(mainWindow);
 //Тестовая среда
 
 function getX(){
-    for(i = -11; i < 11; i++){
+    for(i = -12; i < 12; i++){
         arrX1.push(Math.ceil(x/2 + x1*i));
         arrX2.push(Math.ceil(x/2 + x2*i));
     }
