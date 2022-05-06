@@ -9,13 +9,13 @@ mainWindow.addEventListener('mouseup', setSpeed);
 let x = mainWindow.width;
 let y = mainWindow.height;
 
-let x1 = x/20;
-let x2 = x/5;
-let iter = 0;
+let qX1 = 40;
+let qX2 = 5;
+let x1 = x/qX1;
+let x2 = x/qX2;
 let speed = 0;
-let cycle = 100;
 let moveX1 = 1;
-let moveX2 = Math.ceil(x2/x1);
+let moveX2 = (x2/x1);
 
 //Массивы для точек
 let arrX1 = [];
@@ -26,9 +26,10 @@ document.getElementById('main').appendChild(mainWindow);
 //Тестовая среда
 
 function getX(){
-    for(i = -11; i < 11; i++){
-        arrX1.push(Math.ceil(x/2 + x1*i));
-        arrX2.push(Math.ceil(x/2 + x2*i));
+    let q = Math.ceil((qX1+qX2)/2);
+    for(i = -q; i < q; i++){
+        arrX1.push(x/2 + x1*i);
+        arrX2.push(x/2 + x2*i);
     }
 }
 
@@ -70,13 +71,12 @@ class CanvasBackground {
             this.ctx.moveTo(arrX1[j], 40);
             this.ctx.lineTo(arrX2[j], y);
         }
+        moveAuto();
 
-        if(iter <= cycle){
-            iter++;
-            moveAuto();
-        } else {
+        if(arrX1[0] >= x1){
             swapLines();
-            iter = 0;
+        } else if (arrX1[arrX1.length - 1] <= (x - x1)) {
+            swapLines();
         }
        
         this.ctx.strokeStyle = "#aa77ff";
@@ -93,8 +93,10 @@ canvas.start();
 function swapLines () {
     if(speed > 0) {
         arrX1.unshift(arrX1[0]-x1);
+        //arrX1.unshift(186.16);
         arrX1.pop();
         arrX2.unshift(arrX2[0]-x2);
+        //arrX2.unshift(-1360.3999999999999);
         arrX2.pop();
     } else if (speed < 0) {
         arrX1.push(arrX1[arrX1.length-1]+x1);
@@ -127,9 +129,6 @@ function setSpeed(event){
     } else if (event.which == 3 && speed > -1){
         speed -= 0.1;
     }
-
-    //Устанавливаем цикл
-    cycle = Math.abs(x1/(moveX1*speed));
 }
 
 //Запрет срабатывания контекстного меню
