@@ -9,13 +9,11 @@ mainWindow.addEventListener('mouseup', setSpeed);
 let x = mainWindow.width;
 let y = mainWindow.height;
 
-let qX1 = 30;
+let qX1 = 40;
 let qX2 = 5;
 let x1 = x/qX1;
 let x2 = x/qX2;
-//let iter = 0;
 let speed = 0;
-//let cycle = 100;
 let moveX1 = 1;
 let moveX2 = (x2/x1);
 
@@ -74,18 +72,10 @@ class CanvasBackground {
             this.ctx.lineTo(arrX2[j], y);
         }
         moveAuto();
-        /*
-        if(iter <= cycle){
-            iter++;
-        } else {
-            swapLines();
-            iter = 0;
-        }
-        */
 
-        if(arrX1[0] > x1){
+        if(arrX1[0] >= x1){
             swapLines();
-        } else if (arrX1[arrX1.length - 1] < (x - x1)) {
+        } else if (arrX1[arrX1.length - 1] <= (x - x1)) {
             swapLines();
         }
        
@@ -139,8 +129,6 @@ function setSpeed(event){
     } else if (event.which == 3 && speed > -1){
         speed -= 0.1;
     }
-    //Устанавливаем цикл
-    //cycle = Math.abs(x2/(moveX2*speed));
 }
 
 //Запрет срабатывания контекстного меню
