@@ -1,0 +1,9 @@
+body {
+    background: black;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+}
+
+canvas {
+    border: solid white 1px;
+}
