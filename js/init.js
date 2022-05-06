@@ -61,8 +61,8 @@ class CanvasBackground {
     animate() {
 
         
-        let moveX1 = 0.25;
-        let moveX2 = 3.075;
+        let moveX1 = 1;
+        let moveX2 = 12.3;
         
         this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
 
@@ -85,7 +85,7 @@ class CanvasBackground {
         this.ctx.strokeStyle = `rgb(255, ${(moveX1*iter)/2}, ${(moveX2*iter)/2})`;
         this.ctx.stroke();
 
-        if(iter > 56){
+        if(iter > 14){
             iter = 0;
         }
 
