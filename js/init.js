@@ -15,7 +15,12 @@ let iter = 0;
 let speed = 0;
 let cycle = 100;
 let moveX1 = 1;
-let moveX2 = 12.3;
+let moveX2 = x2/x1;
+
+const x1start = Math.ceil(x/2 + x1*(-40));
+const x2start = Math.ceil(x/2 + x2*(-40));
+const x1end = Math.ceil(x/2 + x1*(40));
+const x2end = Math.ceil(x/2 + x2*(40));
 
 //Массивы для точек
 let arrX1 = [];
@@ -23,12 +28,11 @@ let arrX2 = [];
 
 document.getElementById('main').appendChild(mainWindow);
 
-
 //Тестовая среда
 
 function getX(){
     for(i = -40; i < 40; i++){
-        arrX1.push(Math.ceil(x/2 + x1*i - 30*i));
+        arrX1.push(Math.ceil(x/2 + x1*i));
         arrX2.push(Math.ceil(x/2 + x2*i));
     }
 }
@@ -67,26 +71,24 @@ class CanvasBackground {
         }
 
         //Вертикальные линии
-        
-
         for(let j = 0; j < 80; j++){
             this.ctx.moveTo(arrX1[j], 40);
             this.ctx.lineTo(arrX2[j], y);
         }
 
         if(iter <= cycle){
-            moveAuto();
             iter++;
+            moveAuto();
         } else if (speed > 0) {
-            arrX1.unshift(-129);
+            arrX1.unshift(x1start);
             arrX1.pop();
-            arrX2.unshift(-6645);
+            arrX2.unshift(x2start);
             arrX2.pop();
             iter = 0;
         } else if (speed < 0){
-            arrX1.push(1001);
+            arrX1.push(x1end);
             arrX1.shift();
-            arrX2.push(7354);
+            arrX2.push(x2end);
             arrX2.shift();
             iter = 0;
         }
@@ -121,7 +123,7 @@ canvas.start();
 //Установка скорости и длины цикла
 function setSpeed(event){
     //Увеличение и уменьшение скорости
-    if(event.which == 1 && speed < 1) {
+    if(event.which == 1 && speed < 3) {
         speed += 0.1;
     } else if (event.which == 3 && speed > -1){
         speed -= 0.1;
@@ -129,33 +131,7 @@ function setSpeed(event){
 
     //Устанавливаем цикл
     let t = Number(speed.toFixed(1));
-
-        switch(Math.abs(t)){
-            case 0: cycle = 100;
-            break;
-            case 0.1: cycle = 142;
-            break;
-            case 0.2: cycle = 70;
-            break;
-            case 0.3: cycle = 47;
-            break;
-            case 0.4: cycle = 35;
-            break;
-            case 0.5: cycle = 28;
-            break;
-            case 0.6: cycle = 23;
-            break;
-            case 0.7: cycle = 20;
-            break;
-            case 0.8: cycle = 17;
-            break;
-            case 0.9: cycle = 15;
-            break;
-            case 1: cycle = 14;
-            break;
-            case 1.1: cycle = 12;
-            break;
-        }
+    cycle = Math.ceil(Math.abs(x1/(moveX1*speed)));
 }
 
 //Запрет срабатывания контекстного меню
