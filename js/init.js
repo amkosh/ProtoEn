@@ -4,12 +4,16 @@ mainWindow.width = window.innerWidth - 650;
 mainWindow.height = (mainWindow.width/16)*9;
 mainWindow.id = 'canvas';
 
+mainWindow.addEventListener('mouseup', setSpeed);
+
 let x = mainWindow.width;
 let y = mainWindow.height;
 
 let x1 = x/20;
 let x2 = x/5;
 let iter = 0;
+let speed = 0;
+let cycle = 0;
 
 document.getElementById('main').appendChild(mainWindow);
 
@@ -61,8 +65,8 @@ class CanvasBackground {
     animate() {
 
         
-        let moveX1 = 0.25;
-        let moveX2 = 3.075;
+        let moveX1 = 1;
+        let moveX2 = 12.3;
         
         this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
 
@@ -78,14 +82,14 @@ class CanvasBackground {
 
         //Вертикальные линии
         for(let i = -50; i < 50; i++){
-            this.ctx.moveTo(x/2 + x1*i - 30*i + (moveX1*iter), 40);
-            this.ctx.lineTo(x/2 + x2*i + (moveX2*iter), y);
+            this.ctx.moveTo(x/2 + x1*i - 30*i + (moveX1*iter*speed), 40);
+            this.ctx.lineTo(x/2 + x2*i + (moveX2*iter*speed), y);
         }
 
-        this.ctx.strokeStyle = `rgb(255, ${(moveX1*iter)/2}, ${(moveX2*iter)/2})`;
+        this.ctx.strokeStyle = "#aa77ff";
         this.ctx.stroke();
 
-        if(iter > 56){
+        if(iter > cycle){
             iter = 0;
         }
 
@@ -105,3 +109,56 @@ function generateDecimalBetween(left, right) {
 
 const canvas = new CanvasBackground("canvas");
 canvas.start();
+
+//Установка скорости и длины цикла
+function setSpeed(event){
+    //Увеличение и уменьшение скорости
+    if(event.which == 1 && speed < 1) {
+        speed += 0.1;
+    } else if (event.which == 3 && speed > -1){
+        speed -= 0.1;
+    }
+
+    //Устанавливаем цикл
+    let t = Number(speed.toFixed(1));
+
+        switch(Math.abs(t)){
+            case 0: cycle = 0;
+            break;
+            case 0.1: cycle = 142;
+            break;
+            case 0.2: cycle = 70;
+            break;
+            case 0.3: cycle = 47;
+            break;
+            case 0.4: cycle = 35;
+            break;
+            case 0.5: cycle = 28;
+            break;
+            case 0.6: cycle = 23;
+            break;
+            case 0.7: cycle = 20;
+            break;
+            case 0.8: cycle = 17;
+            break;
+            case 0.9: cycle = 15;
+            break;
+            case 1: cycle = 14;
+            break;
+            case 1.1: cycle = 12;
+            break;
+        }
+    console.log('speed: ' + speed.toFixed(1));
+    console.log('cycle: ' + cycle);
+}
+
+//Запрет срабатывания контекстного меню
+if (document.addEventListener) {
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    }, false);
+} else {
+    document.attachEvent('oncontextmenu', function () {
+        window.event.returnValue = false;
+    });
+}
