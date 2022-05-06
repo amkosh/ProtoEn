@@ -13,36 +13,27 @@ let x1 = x/20;
 let x2 = x/5;
 let iter = 0;
 let speed = 0;
-let cycle = 0;
+let cycle = 100;
+let moveX1 = 1;
+let moveX2 = 12.3;
+
+//Массивы для точек
+let arrX1 = [];
+let arrX2 = [];
 
 document.getElementById('main').appendChild(mainWindow);
 
-this.canvas = document.getElementById('canvas');
 
-/*
-    //Статичное изображение сетки
-        this.ctx = this.canvas.getContext("2d");
-        this.dpr = window.devicePixelRatio;
+//Тестовая среда
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, 40);
-        this.ctx.lineTo(x, 40);
+function getX(){
+    for(i = -40; i < 40; i++){
+        arrX1.push(Math.ceil(x/2 + x1*i - 30*i));
+        arrX2.push(Math.ceil(x/2 + x2*i));
+    }
+}
 
-        //Горизонтальные линии
-        for(i = 1; i < 10; i++){
-            this.ctx.moveTo(0, 50*i + 10*(i*i*0.7));
-            this.ctx.lineTo(x, 50*i + 10*(i*i*0.7));
-        }
-
-        //Вертикальные линии
-        for(let i = -50; i < 50; i++){
-            this.ctx.moveTo(x/2 + x1*i - 30*i, 40);
-            this.ctx.lineTo(x/2 + x2*i, y);
-        }
-
-        this.ctx.strokeStyle = `rgb(255, ${x1/2}, ${x2/2})`;
-        this.ctx.stroke();
-*/
+getX();
 
 class CanvasBackground {
     constructor(id) {
@@ -63,11 +54,6 @@ class CanvasBackground {
     }
 
     animate() {
-
-        
-        let moveX1 = 1;
-        let moveX2 = 12.3;
-        
         this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
 
         this.ctx.beginPath();
@@ -81,34 +67,56 @@ class CanvasBackground {
         }
 
         //Вертикальные линии
-        for(let i = -50; i < 50; i++){
-            this.ctx.moveTo(x/2 + x1*i - 30*i + (moveX1*iter*speed), 40);
-            this.ctx.lineTo(x/2 + x2*i + (moveX2*iter*speed), y);
+        
+
+        for(let j = 0; j < 80; j++){
+            this.ctx.moveTo(arrX1[j], 40);
+            this.ctx.lineTo(arrX2[j], y);
         }
 
+        if(iter <= cycle){
+            moveAuto();
+            iter++;
+        } else if (speed > 0) {
+            arrX1.unshift(-129);
+            arrX1.pop();
+            arrX2.unshift(-6645);
+            arrX2.pop();
+            iter = 0;
+        } else if (speed < 0){
+            arrX1.push(1001);
+            arrX1.shift();
+            arrX2.push(7354);
+            arrX2.shift();
+            iter = 0;
+        }
+       
         this.ctx.strokeStyle = "#aa77ff";
         this.ctx.stroke();
 
-        if(iter > cycle){
-            iter = 0;
-        }
-
-        iter++;
-
         requestAnimationFrame(this.animate.bind(this));
     }
-    
-
-    
 }
-
-function generateDecimalBetween(left, right) {
-    return (Math.random() * (left - right) + right).toFixed(2);
-}
-
 
 const canvas = new CanvasBackground("canvas");
 canvas.start();
+
+//Движение влево-вправо
+    function moveAuto(){
+    let tmp = [];
+    let tmp2 = [];
+        arrX1.forEach((e) => {
+            tmp.push(e + moveX1*speed);
+        })
+        arrX1 = tmp;
+        
+
+        arrX2.forEach((e) => {
+            tmp2.push(e + moveX2*speed);
+        })
+        arrX2 = tmp2;
+        console.log('done');
+}
 
 //Установка скорости и длины цикла
 function setSpeed(event){
@@ -123,7 +131,7 @@ function setSpeed(event){
     let t = Number(speed.toFixed(1));
 
         switch(Math.abs(t)){
-            case 0: cycle = 0;
+            case 0: cycle = 100;
             break;
             case 0.1: cycle = 142;
             break;
@@ -148,8 +156,6 @@ function setSpeed(event){
             case 1.1: cycle = 12;
             break;
         }
-    console.log('speed: ' + speed.toFixed(1));
-    console.log('cycle: ' + cycle);
 }
 
 //Запрет срабатывания контекстного меню
