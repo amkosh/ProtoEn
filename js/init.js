@@ -5,6 +5,7 @@ mainWindow.height = (mainWindow.width/16)*9;    //Высота холста
 mainWindow.id = 'canvas';   //Добавляем ID объекты
 
 mainWindow.addEventListener('mouseup', setSpeed);   //Добавляем обработчик событий (нажатие мыши)
+document.addEventListener('keydown', controls); //Обраотчик ввода с клавиатуры
 
 let x = mainWindow.width;   //Ширина окна
 let y = mainWindow.height;  //Высота окна
@@ -17,6 +18,7 @@ let x2 = x/qX2; //Расстояние между точками снизу
 let speed = 0;  //Скорость движения
 let moveX1 = 1; //Шаг движения для точек сверху
 let moveX2 = (x2/x1);   //Шаг движения для точек снизу
+let sBreak = false; //Торможение
 
 //Массивы для точек
 let arrX1 = []; //Хранилище верхних точек
@@ -89,6 +91,18 @@ class CanvasBackground {
                 tmp2.push(e + moveX2*speed);
             })
             arrX2 = tmp2; //присваивание точек x2 в основной массив для рендеринга
+
+            //Плавное торможение
+            if(sBreak && speed !=0){
+                if(speed > 0) {
+                    speed = (Math.round((speed - 0.1)*10))/10
+                } else if (speed < 0) {
+                    console.log(speed);
+                    speed = (Math.round((speed + 0.1)*10))/10
+                }
+            } else if (sBreak && speed == 0){
+                sBreak = false;
+            }
         }
         
         //Перекладка линий
@@ -131,6 +145,19 @@ function setSpeed(event){
         speed += 0.1;
     } else if (event.which == 3 && speed > -1){
         speed -= 0.1;
+    }
+}
+
+//Управление с клавиатуры
+function controls (event){
+    if(event.key == 'ArrowRight' && speed < 1) {
+        speed = (Math.round((speed + 0.1)*10))/10
+    } else if (event.key == 'ArrowLeft' && speed > -1){
+        speed = (Math.round((speed - 0.1)*10))/10
+    } else if (event.key == ' ' && speed != 0){
+        sBreak = true;
+        console.log(speed);
+        console.log('break');
     }
 }
 

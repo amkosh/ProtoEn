@@ -7,4 +7,6 @@ body {
 
 canvas {
     border: solid white 1px;
+    /*background: linear-gradient(0deg, black 10%, rgb(39, 0, 44) 89%, #aa77ff 91%, rgb(44, 0, 15) 93%, rgb(102, 0, 26) 98%);*/
+    background: linear-gradient(0deg, black, #2c002e);
 }
