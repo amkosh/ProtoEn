@@ -56,18 +56,18 @@ class CanvasBackground {
         this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
 
         this.ctx.beginPath();
-        this.ctx.moveTo(0, 40);
-        this.ctx.lineTo(x, 40);
+        this.ctx.moveTo(0, 40); //TODO: Заменить 40 на переменную
+        this.ctx.lineTo(x, 40); //TODO: Заменить 40 на переменную
 
         //Горизонтальные линии
-        for(let i = 1; i < 10; i++){
+        for(let i = 1; i < 10; i++){    //TODO: Разобраться с циклом отрисовки горизонтальных линий
             this.ctx.moveTo(0, 50*i + 10*(i*i*0.7));
             this.ctx.lineTo(x, 50*i + 10*(i*i*0.7));
         }
 
         //Вертикальные линии
         for(let j = 0; j < (q*2); j++){
-            this.ctx.moveTo(arrX1[j], 40);
+            this.ctx.moveTo(arrX1[j], 40);  //TODO: Заменить 40 на переменную
             this.ctx.lineTo(arrX2[j], y);
         }
 
