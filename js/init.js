@@ -16,7 +16,7 @@ let q = Math.ceil((qX1+qX2)/2); //Коэффициент для создания
 let x1 = x/qX1; //Расстояние между точками сверху
 let x2 = x/qX2; //Расстояние между точками снизу
 let y1 = 40; //Высота горизонта
-let yGap = (y - y1)/(qX2+2)/3;
+let yGap = (y - y1)/(qX2*2)/3;
 let speed = 0;  //Скорость движения
 let moveX1 = 1; //Шаг движения для точек сверху
 let moveX2 = (x2/x1);   //Шаг движения для точек снизу
@@ -62,7 +62,7 @@ class CanvasBackground {
         this.ctx.beginPath(); //Начало рисования
 
         //Горизонтальные линии
-        for(i = 0; i < qX2; i++){
+        for(i = 0; i < qX2*2; i++){
             this.ctx.moveTo(0, y1+(yGap*i*i));
             this.ctx.lineTo(x, y1+(yGap*i*i));
         }
@@ -148,6 +148,29 @@ function setSpeed(event){
     }
 }
 
+//Изменение интервалов на горизонте
+function horizonGapX(j){
+    for(i = 1; i < q; i++){
+        arrX1[q-i] += i * j;
+        arrX1[q+i] -= i * j;
+        arrX2[q-i] += i * j * moveX2;
+        arrX2[q+i] -= i * j * moveX2;
+        x1 += j;
+        x2 += moveX2 * j;
+    }
+
+    if(j > 0){
+        arrX1.push(arrX1[0]-x1);
+        arrX2.push(arrX2[0]-x2);
+        arrX1.push(arrX1[arrX1.length-2]+x1);
+        arrX2.push(arrX2[arrX2.length-2]+x2);
+        q += 2;
+        console.log('bam')
+    } else {
+
+    }
+}
+
 //Управление с клавиатуры
 function controls (event){
     if(event.key == 'ArrowRight' && speed < 1) {
@@ -158,8 +181,10 @@ function controls (event){
         sBreak = true;
     } else if (event.key == 'ArrowUp') {
         y1++;
+        //horizonGapX(-1);
     } else if (event.key == 'ArrowDown') {
         y1--;
+        //horizonGapX(1);
     }
     console.log(event.key);
 }
