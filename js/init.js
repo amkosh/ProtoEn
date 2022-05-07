@@ -15,6 +15,8 @@ let qX2 = 5;    //Точек снизу
 let q = Math.ceil((qX1+qX2)/2); //Коэффициент для создания изначального массива и отрисовки линий
 let x1 = x/qX1; //Расстояние между точками сверху
 let x2 = x/qX2; //Расстояние между точками снизу
+let y1 = 40; //Высота горизонта
+let yGap = (y - y1)/(qX2+2)/3;
 let speed = 0;  //Скорость движения
 let moveX1 = 1; //Шаг движения для точек сверху
 let moveX2 = (x2/x1);   //Шаг движения для точек снизу
@@ -57,19 +59,17 @@ class CanvasBackground {
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, 40); //TODO: Заменить 40 на переменную
-        this.ctx.lineTo(x, 40); //TODO: Заменить 40 на переменную
+        this.ctx.beginPath(); //Начало рисования
 
         //Горизонтальные линии
-        for(let i = 1; i < 10; i++){    //TODO: Разобраться с циклом отрисовки горизонтальных линий
-            this.ctx.moveTo(0, 50*i + 10*(i*i*0.7));
-            this.ctx.lineTo(x, 50*i + 10*(i*i*0.7));
+        for(i = 0; i < qX2; i++){
+            this.ctx.moveTo(0, y1+(yGap*i*i));
+            this.ctx.lineTo(x, y1+(yGap*i*i));
         }
 
         //Вертикальные линии
         for(let j = 0; j < (q*2); j++){
-            this.ctx.moveTo(arrX1[j], 40);  //TODO: Заменить 40 на переменную
+            this.ctx.moveTo(arrX1[j], y1);  //TODO: Заменить 40 на переменную
             this.ctx.lineTo(arrX2[j], y);
         }
 
@@ -156,9 +156,12 @@ function controls (event){
         speed = (Math.round((speed - 0.1)*10))/10
     } else if (event.key == ' ' && speed != 0){
         sBreak = true;
-        console.log(speed);
-        console.log('break');
+    } else if (event.key == 'ArrowUp') {
+        y1++;
+    } else if (event.key == 'ArrowDown') {
+        y1--;
     }
+    console.log(event.key);
 }
 
 //Запрет срабатывания контекстного меню
