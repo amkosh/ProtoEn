@@ -68,7 +68,7 @@ class CanvasBackground {
        }
 
         //Вертикальные линии
-        for(let j = 0; j < (q*2); j++){
+        for(let j = 0; j < (arrX1.length*2); j++){
             this.ctx.moveTo(arrX1[j], y1);
             this.ctx.lineTo(arrX2[j], y);
         }
@@ -106,9 +106,9 @@ class CanvasBackground {
         }
         
         //Перекладка линий
-        if(arrX1[0] >= x1){
+        if(Math.min(...arrX1) >= 0){
             swapLines();
-        } else if (arrX1[arrX1.length - 1] <= (x - x1)) {
+        } else if (Math.max(...arrX1) <= x) {
             swapLines();
         }
        
@@ -127,12 +127,12 @@ canvas.start();
 //Перекладка вертикальных линий
 function swapLines () {
     if(speed > 0) {
-        arrX1.unshift(arrX1[0]-x1);
+        arrX1.unshift((Math.min(...arrX1))-x1);
         arrX1.pop();
         arrX2.unshift(arrX2[0]-x2);
         arrX2.pop();
     } else if (speed < 0) {
-        arrX1.push(arrX1[arrX1.length-1]+x1);
+        arrX1.push((Math.max(...arrX1))+x1);
         arrX1.shift();
         arrX2.push(arrX2[arrX2.length-1]+x2);
         arrX2.shift();
@@ -150,6 +150,37 @@ function setSpeed(event){
 
 //Изменение интервалов на горизонте
 function horizonGapX(j){
+    /*
+    if(x1 > 1){
+        for(i = 1; i <= q; i++){
+            arrX1[q-i] += i * j;
+            arrX1[(q-1)+i] -= i * j;
+        }
+
+        if(j > 0 && (x1-1) > 0){
+            x1--;
+        } else if (j < 0 && x++ < x){
+            x1++;
+        }
+    }
+    if (Math.min(...arrX1) > 0) {
+        
+        //arrX1.unshift((Math.min(...arrX1))-x1);
+        arrX1.unshift(x/2 - x1*((arrX1.length/2)+1));
+        arrX2.unshift(arrX2[0]-x2);
+
+        //arrX1.push((Math.max(...arrX1))+x1);
+        arrX1.push(x/2 + x1*((arrX1.length/2)+1));
+        arrX2.push(arrX2[arrX2.length-1]+x2);
+    } else if (Math.max(...arrX1) > x) {
+        /*
+        arrX1.shift();
+        arrX1.pop();
+        arrX2.shift();
+        arrX2.pop();
+        
+    }
+    */
 }
 
 
@@ -161,16 +192,16 @@ function controls (event){
         speed = (Math.round((speed - 0.1)*10))/10
     } else if (event.key == ' ' && speed != 0){
         sBreak = true;
-    } else if (event.key == 'ArrowUp') {
+    } else if (event.key == 'ArrowUp' && y1 < 300) {
         y1 += 3;
-        //horizonGapX(-1);
-    } else if (event.key == 'ArrowDown') {
-        y1 -= 3;
         //horizonGapX(1);
+    } else if (event.key == 'ArrowDown' && y1 > 100) {
+        y1 -= 3;
+        //horizonGapX(-1);
     } else if (event.key == 'w') {
-        horizonGapX(-1);
-    } else if (event.key == 's') {
         horizonGapX(1);
+    } else if (event.key == 's') {
+        horizonGapX(-1);
     }
     console.log(event.key);
 }
