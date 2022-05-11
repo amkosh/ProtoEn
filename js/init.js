@@ -155,8 +155,14 @@ function horizonGapX(j){
         arrX1[q+i] -= i * j;
         x1 += j;
     }
+
+    arrX1.unshift(arrX1[0]-x1);
+    arrX2.unshift(arrX2[0]-x2);
+    arrX1.push(arrX1[arrX1.length-1]+x1);
+    arrX2.push(arrX2[arrX2.length-1]+x2);
     y1 += 1*j;
 }
+
 
 //Управление с клавиатуры
 function controls (event){
