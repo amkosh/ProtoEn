@@ -67,27 +67,18 @@ class CanvasBackground {
 
         //Горизонтальные линии
        for(i = 0; i <= qY; i++){
-        //this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + (y1 - right));
-        //this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + (y1 - left));
-        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
-        this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
+            if(left - right >= 0){
+                this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) - (y1 - left));
+                this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) - (y1 - right));
+            } else {
+                this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) + (y1 - right));
+                this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) + (y1 - left));
+            }
        }
 
-       /*
         //Вертикальные линии
         for(let j = 0; j < (arrX1.length); j++){
-            this.ctx.moveTo(arrX1[j], left - (((y1-right)/x)*arrX1[j]));
-            this.ctx.lineTo(arrX2[j], y);
-        }
-        */
-        for(let j = 0; j < (arrX1.length); j++){
-            if(left - right >= 0){
-                this.ctx.moveTo(arrX1[j], left - (((left-right)/x)*arrX1[j]));
-            } else {
-                this.ctx.moveTo(arrX1[j], right - (((left-right)/x)*arrX1[j]));
-            }
-            //this.ctx.moveTo(arrX1[j], left - (((y1-right)/x)*arrX1[j]));
-            //this.ctx.moveTo(arrX1[j], y1);
+            this.ctx.moveTo(arrX1[j], left - (((left-right)/x)*arrX1[j]));
             this.ctx.lineTo(arrX2[j], y);
         }
 
@@ -170,6 +161,51 @@ function setSpeed(event){
     }
 }
 
+//Управление с клавиатуры
+function controls (event){
+    if(event.key == 'ArrowRight' && speed < maxSpeed) {
+        speed = (Math.round((speed + 0.1)*10))/10
+    } else if (event.key == 'ArrowLeft' && speed > -maxSpeed){
+        speed = (Math.round((speed - 0.1)*10))/10
+    } else if (event.key == ' ' && speed != 0){
+        sBreak = true;
+    } else if (event.key == 'ArrowUp' && y1 < 300) {
+        y1 += 3;
+        right += 3;
+        left += 3;
+        //horizonGapX(1);
+    } else if (event.key == 'ArrowDown' && y1 > 100) {
+        y1 -= 3;
+        right -= 3;
+        left -= 3;
+        //horizonGapX(-1);
+    } else if (event.key == 'w') {
+        //horizonGapX(1);
+    } else if (event.key == 's') {
+        //horizonGapX(-1);
+    } else if (event.key == 'q' || event.key == 'й'){
+        left++;
+        right--;
+        //y1--;
+    } else if (event.key == 'e' || event.key == 'у'){
+        left--;
+        right++;
+        //y1++;
+    }
+}
+
+//Запрет срабатывания контекстного меню
+if (document.addEventListener) {
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    }, false);
+} else {
+    document.attachEvent('oncontextmenu', function () {
+        window.event.returnValue = false;
+    });
+}
+
+
 //Изменение интервалов на горизонте Пока заморожена фича
 /*
 function horizonGapX(j){
@@ -212,49 +248,3 @@ function horizonGapX(j){
     console.log(arrX1);
 }
 */
-
-
-//Управление с клавиатуры
-function controls (event){
-    if(event.key == 'ArrowRight' && speed < maxSpeed) {
-        speed = (Math.round((speed + 0.1)*10))/10
-    } else if (event.key == 'ArrowLeft' && speed > -maxSpeed){
-        speed = (Math.round((speed - 0.1)*10))/10
-    } else if (event.key == ' ' && speed != 0){
-        sBreak = true;
-    } else if (event.key == 'ArrowUp' && y1 < 300) {
-        y1 += 3;
-        right += 3;
-        left += 3;
-        //horizonGapX(1);
-    } else if (event.key == 'ArrowDown' && y1 > 100) {
-        y1 -= 3;
-        right -= 3;
-        left -= 3;
-        //horizonGapX(-1);
-    } else if (event.key == 'w') {
-        //horizonGapX(1);
-    } else if (event.key == 's') {
-        //horizonGapX(-1);
-    } else if (event.key == 'q' || event.key == 'й'){
-        left++;
-        right--;
-        y1--;
-    } else if (event.key == 'e' || event.key == 'у'){
-        left--;
-        right++;
-        y1++;
-    }
-    console.log(event.key);
-}
-
-//Запрет срабатывания контекстного меню
-if (document.addEventListener) {
-    document.addEventListener('contextmenu', function (e) {
-        e.preventDefault();
-    }, false);
-} else {
-    document.attachEvent('oncontextmenu', function () {
-        window.event.returnValue = false;
-    });
-}
