@@ -69,7 +69,7 @@ class CanvasBackground {
        for(i = 0; i <= qY; i++){
         //this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + (y1 - right));
         //this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + (y1 - left));
-        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) );
+        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
         this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
        }
 
@@ -81,7 +81,13 @@ class CanvasBackground {
         }
         */
         for(let j = 0; j < (arrX1.length); j++){
-            this.ctx.moveTo(arrX1[j], y1);
+            if(left - right >= 0){
+                this.ctx.moveTo(arrX1[j], left - (((left-right)/x)*arrX1[j]));
+            } else {
+                this.ctx.moveTo(arrX1[j], right - (((left-right)/x)*arrX1[j]));
+            }
+            //this.ctx.moveTo(arrX1[j], left - (((y1-right)/x)*arrX1[j]));
+            //this.ctx.moveTo(arrX1[j], y1);
             this.ctx.lineTo(arrX2[j], y);
         }
 
@@ -218,9 +224,13 @@ function controls (event){
         sBreak = true;
     } else if (event.key == 'ArrowUp' && y1 < 300) {
         y1 += 3;
+        right += 3;
+        left += 3;
         //horizonGapX(1);
     } else if (event.key == 'ArrowDown' && y1 > 100) {
         y1 -= 3;
+        right -= 3;
+        left -= 3;
         //horizonGapX(-1);
     } else if (event.key == 'w') {
         //horizonGapX(1);
@@ -229,9 +239,11 @@ function controls (event){
     } else if (event.key == 'q' || event.key == 'й'){
         left++;
         right--;
+        y1--;
     } else if (event.key == 'e' || event.key == 'у'){
         left--;
         right++;
+        y1++;
     }
     console.log(event.key);
 }
