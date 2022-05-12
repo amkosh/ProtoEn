@@ -18,6 +18,8 @@ let x2 = x/qX2; //Расстояние между точками снизу
 let y1 = 120; //Высота горизонта
 let qY = 10; //Количество горизонтальных линий
 let speed = 0;  //Скорость движения
+let vSpeed = 0; //Вертикальная скорость движения
+let cycle = 0;
 let moveX1 = 1; //Шаг движения для точек сверху
 let moveX2 = (x2/x1);   //Шаг движения для точек снизу
 let sBreak = false; //Торможение
@@ -68,7 +70,7 @@ class CanvasBackground {
         //Горизонтальные линии
        for(i = 0; i <= qY; i++){
             if(left - right >= 0){
-                this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) - (y1 - left));
+                this.ctx.moveTo(0, (y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) - (y1 - left)));
                 this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) - (y1 - right));
             } else {
                 this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) + (y1 - right));
@@ -128,6 +130,9 @@ class CanvasBackground {
         gradient.addColorStop(1, '#a5a');
         this.ctx.strokeStyle = gradient; //цвет
         this.ctx.stroke();  //штрих
+
+        let grColor = Math.abs(speed*5);
+        mainWindow.style.background = `linear-gradient(0deg, rgb(0,0,${grColor}), #2c002e)`;
 
         requestAnimationFrame(this.animate.bind(this));
     }
