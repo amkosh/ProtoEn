@@ -23,8 +23,8 @@ let moveX2 = (x2/x1);   //Шаг движения для точек снизу
 let sBreak = false; //Торможение
 let maxSpeed = 10;
 
-let k = 0; //Коэфициент наклона горизонталей слева
-let l = 0; //Коэфициент наклона горизонталей справа
+let left = y1; //Коэфициент наклона горизонталей слева
+let right = y1; //Коэфициент наклона горизонталей справа
 
 //Массивы для точек
 let arrX1 = []; //Хранилище верхних точек
@@ -67,15 +67,24 @@ class CanvasBackground {
 
         //Горизонтальные линии
        for(i = 0; i <= qY; i++){
-        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + k);
-        this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + l);
+        //this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + (y1 - right));
+        //this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + (y1 - left));
+        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i) );
+        this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
        }
 
+       /*
         //Вертикальные линии
-        for(let j = 0; j < (arrX1.length*2); j++){
-            this.ctx.moveTo(arrX1[j], y1 + (k*j));
+        for(let j = 0; j < (arrX1.length); j++){
+            this.ctx.moveTo(arrX1[j], left - (((y1-right)/x)*arrX1[j]));
             this.ctx.lineTo(arrX2[j], y);
         }
+        */
+        for(let j = 0; j < (arrX1.length); j++){
+            this.ctx.moveTo(arrX1[j], y1);
+            this.ctx.lineTo(arrX2[j], y);
+        }
+
 
         //Движение
         moveAuto();
@@ -117,7 +126,10 @@ class CanvasBackground {
         }
        
         //Параметры линий
-        this.ctx.strokeStyle = "#aa77ff"; //цвет
+        let gradient = this.ctx.createLinearGradient(0, 0, 0, 170);
+        gradient.addColorStop(0.5, '#f5f');
+        gradient.addColorStop(1, '#a5a');
+        this.ctx.strokeStyle = gradient; //цвет
         this.ctx.stroke();  //штрих
 
         requestAnimationFrame(this.animate.bind(this));
@@ -214,6 +226,12 @@ function controls (event){
         //horizonGapX(1);
     } else if (event.key == 's') {
         //horizonGapX(-1);
+    } else if (event.key == 'q' || event.key == 'й'){
+        left++;
+        right--;
+    } else if (event.key == 'e' || event.key == 'у'){
+        left--;
+        right++;
     }
     console.log(event.key);
 }
