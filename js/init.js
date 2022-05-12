@@ -124,15 +124,21 @@ class CanvasBackground {
             swapLines();
         }
        
-        //Параметры линий
-        let gradient = this.ctx.createLinearGradient(0, 0, 0, 170);
-        gradient.addColorStop(0.5, '#f5f');
-        gradient.addColorStop(1, '#a5a');
+        //Параметры линий и градиентов
+        let grColor = Math.abs(speed*5);
+        let grPercent = 120 - ((y1 * 100)/y);
+        let grAngle = -((Math.atan(Math.tan((y1-right)/(x/2))))*180)/Math.PI;
+
+        let gradient = this.ctx.createLinearGradient(right, y, left, y1);
+        //gradient.addColorStop(0.5, '#f5f');
+        gradient.addColorStop(0.5, `rgb(${205 + grColor},0,0)`);
+        //gradient.addColorStop(1, '#a5a');
+        gradient.addColorStop(1, `rgb(${120 + grColor},${grColor},170)`);
         this.ctx.strokeStyle = gradient; //цвет
         this.ctx.stroke();  //штрих
 
-        let grColor = Math.abs(speed*5);
-        mainWindow.style.background = `linear-gradient(0deg, rgb(0,0,${grColor}), #2c002e)`;
+        
+        mainWindow.style.background = `linear-gradient(${grAngle}deg, rgb(0,0,${grColor}), #2c002e ${grPercent}%)`;
 
         requestAnimationFrame(this.animate.bind(this));
     }
