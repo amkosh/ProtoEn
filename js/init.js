@@ -21,6 +21,10 @@ let speed = 0;  //Скорость движения
 let moveX1 = 1; //Шаг движения для точек сверху
 let moveX2 = (x2/x1);   //Шаг движения для точек снизу
 let sBreak = false; //Торможение
+let maxSpeed = 10;
+
+let k = 0; //Коэфициент наклона горизонталей слева
+let l = 0; //Коэфициент наклона горизонталей справа
 
 //Массивы для точек
 let arrX1 = []; //Хранилище верхних точек
@@ -63,13 +67,13 @@ class CanvasBackground {
 
         //Горизонтальные линии
        for(i = 0; i <= qY; i++){
-        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
-        this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i));
+        this.ctx.moveTo(0, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + k);
+        this.ctx.lineTo(x, y1 * Math.pow((Math.pow(((y)/y1), 1/(qY-1))), i)  + l);
        }
 
         //Вертикальные линии
         for(let j = 0; j < (arrX1.length*2); j++){
-            this.ctx.moveTo(arrX1[j], y1);
+            this.ctx.moveTo(arrX1[j], y1 + (k*j));
             this.ctx.lineTo(arrX2[j], y);
         }
 
@@ -141,36 +145,42 @@ function swapLines () {
 
 //Установка скорости (мышью)
 function setSpeed(event){
-    if(event.which == 1 && speed < 3) {
+    if(event.which == 1 && speed < 36) {
         speed += 0.1;
-    } else if (event.which == 3 && speed > -3){
+    } else if (event.which == 3 && speed > -36){
         speed -= 0.1;
     }
 }
 
-//Изменение интервалов на горизонте
+//Изменение интервалов на горизонте Пока заморожена фича
+/*
 function horizonGapX(j){
-    /*
-    if(x1 > 1){
-        for(i = 1; i <= q; i++){
-            arrX1[q-i] += i * j;
-            arrX1[(q-1)+i] -= i * j;
+    if(Math.round(x1) >= 14){
+        for(i = 1; i <= (arrX1.length/2); i++){
+            arrX1[(arrX1.length/2)-i] += i * j;
+            //arrX1[((arrX1.length/2)-1)+i+1] -= i * j;
         }
 
-        if(j > 0 && (x1-1) > 0){
+        for(i = 1; i < arrX1.length/2; i++){
+            arrX1[((arrX1.length/2)-1)+i+1] -= i * j;
+        }
+        
+        if(j > 0){
             x1--;
-        } else if (j < 0 && x++ < x){
+        } else if (j < 0){
             x1++;
         }
+    } else {
+        x1 = 14;
     }
-    if (Math.min(...arrX1) > 0) {
+    if (Math.min(...arrX1) > 0 && Math.round(x1) >= 14) {
         
-        //arrX1.unshift((Math.min(...arrX1))-x1);
-        arrX1.unshift(x/2 - x1*((arrX1.length/2)+1));
+        arrX1.unshift((Math.min(...arrX1))-x1);
+        //arrX1.unshift(x/2 - x1*((arrX1.length/2)+1));
         arrX2.unshift(arrX2[0]-x2);
 
-        //arrX1.push((Math.max(...arrX1))+x1);
-        arrX1.push(x/2 + x1*((arrX1.length/2)+1));
+        arrX1.push((Math.max(...arrX1))+x1);
+        //arrX1.push(x/2 + x1*((arrX1.length/2)+1));
         arrX2.push(arrX2[arrX2.length-1]+x2);
     } else if (Math.max(...arrX1) > x) {
         /*
@@ -180,15 +190,17 @@ function horizonGapX(j){
         arrX2.pop();
         
     }
-    */
+
+    console.log(arrX1);
 }
+*/
 
 
 //Управление с клавиатуры
 function controls (event){
-    if(event.key == 'ArrowRight' && speed < 3) {
+    if(event.key == 'ArrowRight' && speed < maxSpeed) {
         speed = (Math.round((speed + 0.1)*10))/10
-    } else if (event.key == 'ArrowLeft' && speed > -3){
+    } else if (event.key == 'ArrowLeft' && speed > -maxSpeed){
         speed = (Math.round((speed - 0.1)*10))/10
     } else if (event.key == ' ' && speed != 0){
         sBreak = true;
@@ -199,9 +211,9 @@ function controls (event){
         y1 -= 3;
         //horizonGapX(-1);
     } else if (event.key == 'w') {
-        horizonGapX(1);
+        //horizonGapX(1);
     } else if (event.key == 's') {
-        horizonGapX(-1);
+        //horizonGapX(-1);
     }
     console.log(event.key);
 }
