@@ -1,11 +1,14 @@
 body {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     background: black;
     font-family: 'Press Start 2P', cursive;
     color: white;
     user-select: none;
-    padding: 20px;
+}
+
+div {
+    padding: 15px;
 }
 
 li {
